@@ -8,7 +8,7 @@ import java.net.Socket;
  
 public class Client 
 {
-	final static String serverIP = "127.0.0.1";
+	final static String serverIP = "192.168.42.1";
 	
     public static void main(String[] args) 
     {
