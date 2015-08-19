@@ -1,3 +1,4 @@
+package tcp;
 // Server.java
  
 import java.io.DataOutputStream;
@@ -14,7 +15,8 @@ public class Server
 	//Define constant
 	final static int PORT = 5000;
 	
-    public static void main(String[] args) 
+    @SuppressWarnings("resource")
+	public static void main(String[] args) 
     {
         ServerSocket serverSocket = null;
          
