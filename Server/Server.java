@@ -1,4 +1,4 @@
-package tcp;
+package Server;
 // Server.java
  
 import java.io.BufferedOutputStream;
@@ -8,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Server 
 {
@@ -51,6 +53,14 @@ public class Server
         } 
     } 
 } 
+
+class Time
+{
+	static String getTime() {
+	    SimpleDateFormat f = new SimpleDateFormat("[hh:mm:ss]");
+	    return f.format(new Date());
+	} 
+}
  
 class FileReceiver extends Thread
 {
