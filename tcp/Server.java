@@ -41,7 +41,7 @@ public class Server
                  
                 // open socket output stream
                 OutputStream out = socket.getOutputStream(); 
-                DataOutputStream dos = new DataOutputStream(out); // 기본형 단위로 처리하는 보조스트림
+                DataOutputStream dos = new DataOutputStream(out); // sub stream
                  
                 // Send data to remote socket
                 dos.writeUTF("Message from server.");

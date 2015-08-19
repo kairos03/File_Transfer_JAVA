@@ -21,7 +21,7 @@ public class Client
              
             // get sockte's output stream
             InputStream in = socket.getInputStream();
-            DataInputStream dis = new DataInputStream(in);  // 기본형 단위로 처리하는 보조스트림
+            DataInputStream dis = new DataInputStream(in);  // sub stream
              
             // data output
             System.out.println("Message from server : " + dis.readUTF());
