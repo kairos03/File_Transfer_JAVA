@@ -1,13 +1,13 @@
 package tcp;
 // Server.java
  
-import java.io.DataOutputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Server 
 {
@@ -24,7 +24,7 @@ public class Server
         {
             // server Socket create and bind
             serverSocket = new ServerSocket(PORT);
-            System.out.println(getTime() + " Listening...");
+            System.out.println(Time.getTime() + " Listening...");
         } 
         catch (IOException e) 
         {
@@ -37,30 +37,72 @@ public class Server
             {
                 // accept
                 Socket socket = serverSocket.accept();
-                System.out.println(getTime() + "Incoming conntect" + socket.getInetAddress() );
-                 
-                // open socket output stream
-                OutputStream out = socket.getOutputStream(); 
-                DataOutputStream dos = new DataOutputStream(out); // sub stream
+                System.out.println(Time.getTime() + "Incoming conntect" + socket.getInetAddress() );
                  
                 // Send data to remote socket
-                dos.writeUTF("Message from server.");
-                System.out.println(getTime() + " Data Transfered");
+                FileReceiver fr = new FileReceiver(socket);
+                fr.start();
                  
-                // closet stream and socket
-                dos.close();
-                socket.close();
             } 
             catch (IOException e) 
             {
                 e.printStackTrace();
-            } // try - catch
-        } // while
-    } // main
-     
-    static String getTime() {
-        SimpleDateFormat f = new SimpleDateFormat("[hh:mm:ss]");
-        return f.format(new Date());
-    } // getTime
-} // TcpServerTest
+            } 
+        } 
+    } 
+} 
  
+class FileReceiver extends Thread
+{
+	Socket socket;
+	DataInputStream dis;
+	FileOutputStream fos;
+	BufferedOutputStream bos;
+	
+	public FileReceiver(Socket socket)
+	{
+		this.socket = socket;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		try 
+		{
+			System.out.println(Time.getTime() + "File Transfering start");
+			dis = new DataInputStream(socket.getInputStream());
+			
+			//file name send
+			String fName = dis.readUTF();
+			System.out.println(Time.getTime() + "File Name : " + fName + "receved");
+			fName = fName.replaceAll("a", "b");
+			
+			//create file
+			File f = new File(fName);
+			fos = new FileOutputStream(f);
+			bos = new BufferedOutputStream(fos);
+			System.out.println(Time.getTime() + fName + "file created");
+			
+			//byte data read & write
+			int len;
+			int size = 4096;
+			byte[] data = new byte[size];
+			while( (len = dis.read(data)) != -1 )
+			{
+				bos.write(data,0,len);
+			}
+			
+			bos.flush();
+			bos.close();
+			fos.close();
+			dis.close();
+			
+			System.out.println(Time.getTime() + "ALL File Received");
+			System.out.println(Time.getTime() + "file size : " + f.length());
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+}
