@@ -81,7 +81,7 @@ class FileSender extends Thread
 			System.out.println(Time.getTime() + "file transfer start");
 			
 			//file name transfer
-			String fName = "~/media/RACK001201508132000.mp4";
+			String fName = System.getProperty("user.home") + "media/RACK001201508132000.mp4";
 			dos.writeUTF(fName);
 			System.out.print(Time.getTime() + "File name (%s) Sended\n");
 			
